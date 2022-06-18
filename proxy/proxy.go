@@ -32,7 +32,7 @@ type HTTPProxy struct {
 	alive        map[string]bool
 }
 
-func NewHttpProxy(targets []string, balancer string) (*HTTPProxy, error) {
+func NewHttpProxy(targets []string, balancerAlgorithm string) (*HTTPProxy, error) {
 	hostMap := make(map[string]*httputil.ReverseProxy)
 	hosts := make([]string, 0)
 	alive := make(map[string]bool)
@@ -57,5 +57,14 @@ func NewHttpProxy(targets []string, balancer string) (*HTTPProxy, error) {
 		hosts = append(hosts, host)
 	}
 
-	balancer, err := balancer.Build(balancer, hosts)
+	balancer, err := balancer.Build(balancerAlgorithm, hosts)
+	if err != nil {
+		return nil, err
+	}
+
+	return &HTTPProxy{
+		hostMap:  hostMap,
+		balancer: balancer,
+		alive:    alive,
+	}, nil
 }

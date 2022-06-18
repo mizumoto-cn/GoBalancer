@@ -15,13 +15,16 @@ var (
 	ErrBalancerAlgorithmNotFound = errors.New("balancer algorithm not found")
 )
 
-type factories func([]string) (Balancer, error)
+// factory design pattern
+type factory func([]string) (Balancer, error)
 
-var factoriesMap = map[string]factories
+// factoriesMap is a map of algorithm name to factory function
+var factoriesMap = make(map[string]factory)
 
-func Build (algorithm string, hosts []string) (Balancer, error) {
+// Build returns a Balancer instance based on the algorithm name
+func Build(algorithm string, hosts []string) (Balancer, error) {
 	if factory, ok := factoriesMap[algorithm]; ok {
-		return factory(hosts), nil
+		return factory(hosts) //, nil
 	}
 	return nil, ErrBalancerAlgorithmNotFound
 }
