@@ -32,6 +32,10 @@ type HTTPProxy struct {
 	alive        map[string]bool
 }
 
+// NewHTTPProxy creates a new HTTPProxy instance.
+// targets is a slice of URLs that the proxy will forward requests to.
+// balancerAlgorithm is the name of the balancer algorithm.
+// This function resolves every URL it receives and creates a new reverse proxy for each.
 func NewHttpProxy(targets []string, balancerAlgorithm string) (*HTTPProxy, error) {
 	hostMap := make(map[string]*httputil.ReverseProxy)
 	hosts := make([]string, 0)
