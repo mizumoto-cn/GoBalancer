@@ -1,10 +1,27 @@
 package proxy
 
 import (
+	"net/http"
 	"net/http/httputil"
+	"net/url"
 	"sync"
 
 	"github.com/mizumoto-cn/gobalancer/balancer"
+)
+
+// I hate arbitrary names in http protocol.
+// For god's sake, what does the fucking letter "X" mean?
+// And everyone using these names, fucking moron.
+// See why they choose dumb-ass "x-" prefixes at
+// https://datatracker.ietf.org/doc/html/rfc6648
+var (
+	XRealIP       = http.CanonicalHeaderKey("X-Real-IP")
+	XProxyIP      = http.CanonicalHeaderKey("X-Proxy-IP")
+	XForwardedFor = http.CanonicalHeaderKey("X-Forwarded-For")
+)
+
+var (
+	ReverseProxy = "Balancer-ReverseProxy"
 )
 
 type HTTPProxy struct {
@@ -13,4 +30,32 @@ type HTTPProxy struct {
 
 	sync.RWMutex // protects maps as they are shared across goroutines
 	alive        map[string]bool
+}
+
+func NewHttpProxy(targets []string, balancer string) (*HTTPProxy, error) {
+	hostMap := make(map[string]*httputil.ReverseProxy)
+	hosts := make([]string, 0)
+	alive := make(map[string]bool)
+
+	for _, target := range targets {
+		url, err := url.Parse(target)
+		if err != nil {
+			return nil, err
+		}
+		proxy := httputil.NewSingleHostReverseProxy(url)
+
+		originDirect := proxy.Director
+		proxy.Director = func(r *http.Request) {
+			originDirect(r)
+			r.Header.Set(XProxyIP, ReverseProxy) // set the proxy IP to distinguish from real IP
+			r.Header.Set(XRealIP, GetIP(r))      // set the real IP
+		}
+
+		host := GetHost(url) // get the host name from the URL
+		alive[host] = true   // set the host as alive as default
+		hostMap[host] = proxy
+		hosts = append(hosts, host)
+	}
+
+	balancer, err := balancer.Build(balancer, hosts)
 }
