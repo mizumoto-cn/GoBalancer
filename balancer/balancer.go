@@ -13,6 +13,8 @@ type Balancer interface {
 var (
 	ErrHostNotFound              = errors.New("host not found")
 	ErrBalancerAlgorithmNotFound = errors.New("balancer algorithm not found")
+	ErrHostAlreadyExists         = errors.New("host already exists")
+	ErrNoLoadToRemove            = errors.New("no load to remove")
 )
 
 // factory design pattern

@@ -126,3 +126,5 @@ Typically, we have a set of 7 load balancer algorithms:
 - consistent hash with bounded capacity
 - ip-hash
 - least-loaded
+  
+Thank tencentyun/tsf-go for [practical p2c algorithm implementation](https://github.com/tencentyun/tsf-go/blob/master/balancer/p2c/p2c.go) examples.
