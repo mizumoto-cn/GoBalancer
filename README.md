@@ -33,7 +33,7 @@ Go Balancer is a payload balancer, so let's start with the payload balancer part
 
 Balancer is a interface that defines the payload balancer with the following methods.
 
-[Banlancer](balancer/balancer.go)
+[Balancer](balancer/balancer.go)
 
 ```golang
 type Balancer interface {
