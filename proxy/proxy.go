@@ -1,6 +1,8 @@
 package proxy
 
 import (
+	"fmt"
+	"log"
 	"net/http"
 	"net/http/httputil"
 	"net/url"
@@ -49,6 +51,7 @@ func NewHttpProxy(targets []string, balancerAlgorithm string) (*HTTPProxy, error
 		proxy := httputil.NewSingleHostReverseProxy(url)
 
 		originDirect := proxy.Director
+		// proxy.Director is a function that takes a request and returns a modified request.
 		proxy.Director = func(r *http.Request) {
 			originDirect(r)
 			r.Header.Set(XProxyIP, ReverseProxy) // set the proxy IP to distinguish from real IP
@@ -71,4 +74,28 @@ func NewHttpProxy(targets []string, balancerAlgorithm string) (*HTTPProxy, error
 		balancer: balancer,
 		alive:    alive,
 	}, nil
+}
+
+// To implement reverse proxy, we need to override ServeHTTP method.
+// HTTPProxy will forward the request to the target host based on the balancer algorithm.
+// When failed to forward the request, HTTPProxy will return a 502 error.
+func (h *HTTPProxy) ServeHTTP(w http.ResponseWriter, r *http.Request) {
+	defer func() {
+		if err := recover(); err != nil {
+			log.Printf("proxy panic: %v", err)
+			w.WriteHeader(http.StatusBadGateway)
+			w.Write([]byte(err.(error).Error()))
+		}
+	}()
+
+	host, err := h.balancer.BalanceHost(GetIP(r))
+	if err != nil {
+		w.WriteHeader(http.StatusBadGateway)
+		w.Write([]byte(fmt.Sprintf("balancer error: %v", err)))
+		return
+	}
+
+	h.balancer.Inc(host)
+	defer h.balancer.Done(host)
+	h.hostMap[host].ServeHTTP(w, r)
 }
