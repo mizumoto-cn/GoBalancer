@@ -27,7 +27,10 @@ Try show the architecture of the project in tree diagram below.
 └── util     # utilities
 ```
 
-Go Balancer is a payload balancer, so let's start with the payload balancer part.
+Go Balancer is a light-weight payload balancer.
+It has no complex architecture, basically only uses the factory pattern in balancer registry and creation.
+
+Let's start with the payload balancer part.
 
 ### Balancer
 
@@ -54,6 +57,67 @@ type Balancer interface {
 After understanding the abstract of Balancer, let's start to implement the balancer algorithms.
 
 There will be 7 algorithms implemented in this project:
+
+- random
+- round-robin
+- power-of-two random choice
+- consistent hash
+- consistent hash with bounded capacity
+- ip-hash
+- least-loaded
+
+### Factory Pattern
+
+The factory pattern is used to create the balancer. We defined a `Factory` function that returns a `Balancer` interface.
+
+Then we use `Build()` function to create the balancer through the factory by calling the `factory` function.
+
+The factory pattern is defined as follows at [balancer.go](balancer/balancer.go).
+
+```golang
+// factory design pattern
+type factory func([]string) (Balancer, error)
+
+// factoriesMap is a map of algorithm name to factory function
+var factoriesMap = make(map[string]factory)
+
+// Build returns a Balancer instance based on the algorithm name
+func Build(algorithm string, hosts []string) (Balancer, error) {
+	if factory, ok := factoriesMap[algorithm]; ok {
+		return factory(hosts) //, nil
+	}
+	return nil, ErrBalancerAlgorithmNotFound
+}
+```
+
+For each load balancer algorithm, we register them into the `factories` map in `init()` function.
+
+Take [`round-robin`](balancer/round_robin.go) as an example:
+
+```golang
+// Register RoundRobin as a balancer algorithm in the factories map.
+func init() {
+	factoriesMap["round_robin"] = NewRoundRobin // register the factory function
+}
+
+func NewRoundRobin(hosts []string) (Balancer, error) {
+	return &RoundRobin{i: 0, hosts: hosts}, nil
+}
+```
+
+### Health Check
+
+> To be implemented.
+
+### Util & Configure
+
+We set separated utilities in the [`util` package](util/util.go), while the configuration is in the `main` package.
+
+> To be implemented.
+
+## Algorithms
+
+Typically, we have a set of 7 load balancer algorithms:
 
 - random
 - round-robin
