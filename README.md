@@ -1,5 +1,7 @@
 # Go Balancer
 
+![Go Version](https://img.shields.io/badge/Go%20version-v1.18.3-yellow)
+
 A tiny payload balancer written in go. Based on net/http/httputil. An layer-7 application and also a payload-balancing algorithm library.
 
 ## Quick Start
@@ -36,7 +38,7 @@ Let's start with the payload balancer part.
 
 Balancer is a interface that defines the payload balancer with the following methods.
 
-[Balancer](balancer/balancer.go)
+[Balancer](balancer/balancer.go) <!-- markdownlint-disable MD010-->
 
 ```golang
 type Balancer interface {
@@ -119,12 +121,12 @@ We set separated utilities in the [`util` package](util/util.go), while the conf
 
 Typically, we have a set of 7 load balancer algorithms:
 
-- random
-- round-robin
-- power-of-two random choice
-- consistent hash
-- consistent hash with bounded capacity
-- ip-hash
-- least-loaded
+- random [![status](https://img.shields.io/badge/status-implemented-green)](/balancer/random.go)
+- round-robin [![status](https://img.shields.io/badge/status-implemented-green)](/balancer/round_robin.go)
+- power-of-two random choice [![status](https://img.shields.io/badge/status-implemented-green)](/balancer/p2c.go)
+- consistent ![status](https://img.shields.io/badge/status-not%20implemented-gray)
+- consistent hash with bounded capacity ![status](https://img.shields.io/badge/status-not%20implemented-gray)
+- ip-hash [![status](https://img.shields.io/badge/status-implemented-green)](/balancer/ip_hash.go)
+- least-loaded [![status](https://img.shields.io/badge/status-implemented-green)](/balancer/least_loaded.go)
   
 Thank tencentyun/tsf-go for [practical p2c algorithm implementation](https://github.com/tencentyun/tsf-go/blob/master/balancer/p2c/p2c.go) examples.
