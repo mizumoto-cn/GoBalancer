@@ -58,7 +58,7 @@ func TestRandom_RemoveHost(t *testing.T) {
 				"http://127.0.0.1:1012", "http://127.0.0.1:1013"}, rand: rand},
 			"http://127.0.0.1:1013",
 			&Random{hosts: []string{"http://127.0.0.1:1011",
-				"http://127.0.01:1012"}, rand: rand},
+				"http://127.0.0.1:1012"}, rand: rand},
 		},
 		{
 			"test-2",
