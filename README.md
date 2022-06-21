@@ -109,7 +109,17 @@ func NewRoundRobin(hosts []string) (Balancer, error) {
 
 ### Health Check
 
-> To be implemented.
+In general, we follow these rules to set health check tests in multi-service architecture:
+
+- between service providers and consumers, making sure the service invocation is available
+- between registrar and service providers, making sure the registry knows the service provider is available
+- between registrar and service consumers, making sure the registry knows the service consumer is available
+
+Herein, both service providers and consumers are the clients to the registrar. 
+
+We don't really need to implement this project to be part of a multi-service architecture thus we only set health check tests between the proxy and the service-providing servers( as clients).
+
+I'd rather prefer clients sending heartbeats to the registrar regularly than to implement the health check tests in the proxy but it will make the project too complicated for its potential application scenarios.
 
 ### Util & Configure
 
@@ -121,12 +131,12 @@ We set separated utilities in the [`util` package](util/util.go), while the conf
 
 Typically, we have a set of 7 load balancer algorithms:
 
-- random [![status](https://img.shields.io/badge/status-implemented-green)](/balancer/random.go)
-- round-robin [![status](https://img.shields.io/badge/status-implemented-green)](/balancer/round_robin.go)
-- power-of-two random choice [![status](https://img.shields.io/badge/status-implemented-green)](/balancer/p2c.go)
-- consistent ![status](https://img.shields.io/badge/status-not%20implemented-gray)
-- consistent hash with bounded capacity ![status](https://img.shields.io/badge/status-not%20implemented-gray)
-- ip-hash [![status](https://img.shields.io/badge/status-implemented-green)](/balancer/ip_hash.go)
-- least-loaded [![status](https://img.shields.io/badge/status-implemented-green)](/balancer/least_loaded.go)
+- random [![status](https://img.shields.io/badge/test-pass-green)](/balancer/random.go)
+- round-robin [![status](https://img.shields.io/badge/test-pass-green)](/balancer/round_robin.go)
+- power-of-two random choice [![status](https://img.shields.io/badge/test-pass-green)](/balancer/p2c.go)
+- consistent ![status](https://img.shields.io/badge/status-not%20implemented-red)
+- consistent hash with bounded capacity ![status](https://img.shields.io/badge/status-not%20implemented-red)
+- ip-hash [![status](https://img.shields.io/badge/test-pass-green)](/balancer/ip_hash.go)
+- least-loaded [![status](https://img.shields.io/badge/test-pass-green)](/balancer/least_loaded.go)
   
 Thank tencentyun/tsf-go for [practical p2c algorithm implementation](https://github.com/tencentyun/tsf-go/blob/master/balancer/p2c/p2c.go) examples.

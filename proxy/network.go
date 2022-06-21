@@ -6,7 +6,10 @@ import (
 	"net/http"
 	"net/url"
 	"strings"
+	"time"
 )
+
+var ConnectionTimeout = time.Duration(3) * time.Second
 
 // GetIP returns the real client IP of the request.
 // If the X-Forwarded-For header is set, it returns the first IP of the header.
@@ -43,3 +46,6 @@ func GetHost(u *url.URL) string {
 	}
 	return u.Host
 }
+
+// heartbeat check checks the health of the service.
+func 
