@@ -8,20 +8,19 @@ import (
 )
 
 // test dataset
-var (
-	param0 = "http://127.0.0.1:1011"
-	param1 = "http://127.0.0.1:1012"
-	param2 = "http://127.0.0.1:1013"
-)
-
-var (
-	ih_1, _   = NewIPHash([]string{param0, param1, param2})
-	ih_2, _   = NewIPHash([]string{param0, param1})
-	ih_nil, _ = NewIPHash([]string{})
+const (
+	test_param0 = "http://127.0.0.1:1011"
+	test_param1 = "http://127.0.0.1:1012"
+	test_param2 = "http://127.0.0.1:1013"
+	test_param3 = "http://127.0.0.1:1014"
 )
 
 // Test IPHash::AddHost
 func TestIPHash_AddHost(t *testing.T) {
+	var (
+		ih_1, _ = NewIPHash([]string{test_param0, test_param1, test_param2})
+		ih_2, _ = NewIPHash([]string{test_param0, test_param1})
+	)
 	type expect struct {
 		balancer Balancer
 		err      error
@@ -35,13 +34,13 @@ func TestIPHash_AddHost(t *testing.T) {
 		{
 			"test-1",
 			ih_1,
-			param2,
+			test_param2,
 			expect{ih_1, nil},
 		},
 		{
 			"test-2",
 			ih_2,
-			param2,
+			test_param2,
 			expect{ih_1, nil},
 		},
 	}
@@ -56,6 +55,10 @@ func TestIPHash_AddHost(t *testing.T) {
 
 // Test IPHash::RemoveHost
 func TestIPHash_RemoveHost(t *testing.T) {
+	var (
+		ih_1, _ = NewIPHash([]string{test_param0, test_param1, test_param2})
+		ih_2, _ = NewIPHash([]string{test_param0, test_param1})
+	)
 	type expect struct {
 		balancer Balancer
 		err      error
@@ -69,14 +72,14 @@ func TestIPHash_RemoveHost(t *testing.T) {
 		{
 			"test-1",
 			ih_1,
-			param1,
-			expect{&IPHash{hosts: []string{param0, param2}}, nil},
+			test_param1,
+			expect{&IPHash{hosts: []string{test_param0, test_param2}}, nil},
 		},
 		{
 			"test-2",
 			ih_2,
-			param2,
-			expect{&IPHash{hosts: []string{param0, param1}}, nil},
+			test_param2,
+			expect{&IPHash{hosts: []string{test_param0, test_param1}}, nil},
 		},
 	}
 	for _, c := range cases {
@@ -90,6 +93,10 @@ func TestIPHash_RemoveHost(t *testing.T) {
 
 // Test IPHash::BalanceHost
 func TestIPHash_BalanceHost(t *testing.T) {
+	var (
+		ih_1, _   = NewIPHash([]string{test_param0, test_param1, test_param2})
+		ih_nil, _ = NewIPHash([]string{})
+	)
 	type expect struct {
 		reply string
 		err   error
@@ -104,7 +111,7 @@ func TestIPHash_BalanceHost(t *testing.T) {
 			"test-1",
 			ih_1,
 			"192.168.1.1",
-			expect{param0, nil},
+			expect{test_param0, nil},
 		},
 		{
 			"test-2",
@@ -116,6 +123,7 @@ func TestIPHash_BalanceHost(t *testing.T) {
 	for _, c := range cases {
 		t.Run(c.name, func(t *testing.T) {
 			reply, err := c.balancer.BalanceHost(c.key)
+			//assert.Equal(t, ih_1, IPHash{hosts: []string{param0, param1, param2}}.hosts)
 			assert.Equal(t, c.expect.err, err)
 			assert.Equal(t, c.expect.reply, reply)
 		})
