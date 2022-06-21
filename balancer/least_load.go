@@ -14,7 +14,7 @@ import (
 
 // registration of least load balancer algorithm
 func init() {
-	factoriesMap["least_load"] = NewLeastLoad
+	factoriesMap[LeastLoadBalancer] = NewLeastLoad
 }
 
 // Tag is a tag for LeastLoad.
@@ -48,14 +48,14 @@ func NewLeastLoad(hosts []string) (Balancer, error) {
 func (ll *LeastLoad) AddHost(host string) error {
 	ll.Lock()
 	defer ll.Unlock()
-	if ok := ll.heap.GetValue(host); ok == nil {
+	if ok := ll.heap.GetValue(host); ok != nil { // I wrote it to == which is wrong. What a retard :(
 		return ErrHostAlreadyExists
 	}
 	// h := &host_info{
 	// 	host_name: host,
 	// 	load:      0,
 	// }
-	ll.heap.Insert(host, 0)
+	ll.heap.InsertValue(&host_info{host, 0}) // ....I made it wrong again
 	return nil
 }
 
