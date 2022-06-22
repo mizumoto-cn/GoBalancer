@@ -47,5 +47,18 @@ func GetHost(u *url.URL) string {
 	return u.Host
 }
 
-// heartbeat check checks the health of the service.
-func 
+// IsBackendAlive checks the health of the backend by
+// attempting to establish a TCP connection to the backend.
+func IsBackendAlive(host string) bool {
+	addr, err := net.ResolveTCPAddr("tcp", host)
+	if err != nil {
+		return false
+	}
+	resolveAddr := fmt.Sprintf("%s:%d", addr.IP, addr.Port)
+	conn, err := net.DialTimeout("tcp", resolveAddr, ConnectionTimeout)
+	if err != nil {
+		return false
+	}
+	conn.Close()
+	return true
+}

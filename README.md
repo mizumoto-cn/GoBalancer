@@ -1,6 +1,7 @@
 # Go Balancer
 
 ![Go Version](https://img.shields.io/badge/Go%20version-v1.18.3-yellow)
+[![License](https://img.shields.io/badge/License-MGPL%20v1.2-green.svg)](/License/Mizumoto%20General%20Public%20License%20v1.2.md)
 
 A tiny payload balancer written in go. Based on net/http/httputil. An layer-7 application and also a payload-balancing algorithm library.
 
@@ -115,7 +116,7 @@ In general, we follow these rules to set health check tests in multi-service arc
 - between registrar and service providers, making sure the registry knows the service provider is available
 - between registrar and service consumers, making sure the registry knows the service consumer is available
 
-Herein, both service providers and consumers are the clients to the registrar. 
+Herein, both service providers and consumers are the clients to the registrar.
 
 We don't really need to implement this project to be part of a multi-service architecture thus we only set health check tests between the proxy and the service-providing servers( as clients).
 
