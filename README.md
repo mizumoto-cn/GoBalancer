@@ -4,7 +4,9 @@
 [![License](https://img.shields.io/badge/License-MGPL%20v1.2-green.svg)](/License/Mizumoto%20General%20Public%20License%20v1.2.md)
 
 [![Build](https://github.com/mizumoto-cn/GoBalancer/actions/workflows/go.yml/badge.svg)](https://github.com/mizumoto-cn/GoBalancer/actions)
-
+[![Go Report Card](https://goreportcard.com/badge/github.com/mizumoto-cn/gobalancer)](https://goreportcard.com/report/github.com/mizumoto-cn/gobalancer)
+[![CodeFactor](https://www.codefactor.io/repository/github/mizumoto-cn/gobalancer/badge)](https://www.codefactor.io/repository/github/mizumoto-cn/gobalancer)
+[![Go Version](https://img.shields.io/badge/Go%20version-1.18.3-green.svg)](https://golang.org/doc/install)
 
 ```golang
   ________      __________        .__                                    
