@@ -1,11 +1,11 @@
 {
     "schema": "http",
     "port": 8089,
-    "ssl_certificate": null,
-    "ssl_certificate_key": null,
-    "tcp_health_check": true,
+    "ssl_cert": null,
+    "ssl_cert_key": null,
+    "health_check": true,
     "health_check_interval": 3,
-    "max_allowed": 100,
+    "max_connections": 100,
     "location": [
         {
             "pattern": "/",

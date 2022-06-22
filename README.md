@@ -6,6 +6,7 @@
 [![Build](https://github.com/mizumoto-cn/GoBalancer/actions/workflows/go.yml/badge.svg)](https://github.com/mizumoto-cn/GoBalancer/actions)
 [![Go Report Card](https://goreportcard.com/badge/github.com/mizumoto-cn/gobalancer)](https://goreportcard.com/report/github.com/mizumoto-cn/gobalancer)
 [![CodeFactor](https://www.codefactor.io/repository/github/mizumoto-cn/gobalancer/badge)](https://www.codefactor.io/repository/github/mizumoto-cn/gobalancer)
+[![codecov](https://codecov.io/gh/mizumoto-cn/GoBalancer/branch/main/graph/badge.svg?token=UK8P1TX6WE)](https://codecov.io/gh/mizumoto-cn/GoBalancer)
 [![Go Version](https://img.shields.io/badge/Go%20version-1.18.3-green.svg)](https://golang.org/doc/install)
 
 ```golang
@@ -21,7 +22,59 @@ A tiny payload balancer written in go. Based on net/http/httputil. An layer-7 ap
 
 ## Quick Start
 
-nil
+### Install
+
+First, clone the repository.
+
+```bash
+  git clone https://github.com/mizumoto-cn/GoBalancer.git
+```
+
+and build the binary.
+
+```bash
+  cd GoBalancer
+  go build
+```
+
+### First Run
+
+You need to create a config file first, see example config file at [config.yml](config.yml).
+
+And then, you can run the binary.
+
+On Linux/UNIX, you can use `./GoBalancer` to run the binary.
+
+```bash
+  ./GoBalancer
+```
+
+On Windows, you can use `GoBalancer.exe` to run the binary.
+
+```bash
+  ./GoBalancer.exe
+```
+
+And you'll see the following output:
+
+```bash
+PS D:\Reposits\GoBalancer> .\gobalancer.exe
+Schema: http
+Port: 8089
+HealthCheck: false
+MaxConnections: 0
+
+  ________      __________        .__
+ /  _____/  ____\______   \_____  |  | _____    ____   ____  ___________
+/   \  ___ /  _ \|    |  _/\__  \ |  | \__  \  /    \_/ ___\/ __ \_  __ \
+\    \_\  (  <_> )    |   \ / __ \|  |__/ __ \|   |  \  \__\  ___/|  | \/
+ \______  /\____/|______  /(____  /____(____  /___|  /\___  >___  >__|
+        \/              \/      \/          \/     \/     \/    \/
+
+Pattern: /
+ProxyPass: [http://192.168.1.1 http://192.168.1.2:1015 https://192.168.1.2 http://my-server.com]
+BalanceMode: round_robin
+```
 
 ## Forward Proxy and Reverse Proxy
 
