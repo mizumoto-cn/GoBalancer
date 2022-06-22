@@ -16,7 +16,7 @@ var _ = Describe("Tests of fibHeap", func() {
 		anotherHeap *FibHeap
 	)
 
-	Context("behaviour tests of tag/key interfaces", func() {
+	Context("behavior tests of tag/key interfaces", func() {
 		BeforeEach(func() {
 			heap = NewFibHeap()
 		})
@@ -760,13 +760,13 @@ var _ = Describe("Tests of fibHeap", func() {
 			}
 
 			debugMsg := "Total number: 16, Root Size: 1, Index size: 16,\n" +
-				"Current minimun: key(14.000000), tag(14), value(&{14 14 14}),\n" +
+				"Current minimum: key(14.000000), tag(14), value(&{14 14 14}),\n" +
 				"Heap detail:\n" +
 				"< 14.000000 < 56.000000 28.000000 < 42.000000 > 30.000000 < 33.000000 36.000000 < 39.000000 > > 20.000000 < 22.000000 24.000000 < 26.000000 > 40.000000 < 44.000000 48.000000 < 52.000000 > > > > > \n"
 			Expect(heap.String()).Should(BeEquivalentTo(debugMsg))
 		})
 
-		It("Given one fibHeaps which one nomal and multi +inf keys, when call ExtractMin, it should update min value correctly.", func() {
+		It("Given one fibHeaps which one normal and multi +inf keys, when call ExtractMin, it should update min value correctly.", func() {
 			heap.Insert(0, 0)
 			heap.Insert(1, math.Inf(1))
 			heap.Insert(2, math.Inf(1))
