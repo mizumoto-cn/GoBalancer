@@ -18,7 +18,7 @@
         \/              \/      \/          \/     \/     \/    \/
 ```  
 
-🚦 A fast, stable, light-weight layer-7 load balancer written in go. Based on `net/http/httputil`, also a payload-balancing algorithm library.
+🚦 A fast, stable, light-weight layer-7 load balancer written in go. Based on `net/http/httputil`, also a load-balancing algorithm library.
 
 ## Quick Start
 
