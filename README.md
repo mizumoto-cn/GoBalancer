@@ -25,13 +25,13 @@ An layer-7 application and also a payload-balancing algorithm library.
 
 ### Install
 
-First, clone the repository.
+First, clone the repository,
 
 ```bash
   git clone https://github.com/mizumoto-cn/GoBalancer.git
 ```
 
-and build the binary.
+and then build the binary with:
 
 ```bash
   cd GoBalancer
@@ -40,11 +40,11 @@ and build the binary.
 
 ### First Run
 
-You need to create a config file first, see example config file at [config.yml](config.yml).
+You need to create a config file first, see example config file at [config.json](./config.json).
 
 And then, you can run the binary.
 
-On Linux/UNIX, you can use `./GoBalancer` to run the binary.
+On Linux / UNIX, you can type `./GoBalancer` to run the binary.
 
 ```bash
   ./GoBalancer
