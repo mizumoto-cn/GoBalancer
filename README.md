@@ -61,8 +61,8 @@ And you'll see the following output:
 PS D:\Reposits\GoBalancer> .\gobalancer.exe
 Schema: http
 Port: 8089
-HealthCheck: false
-MaxConnections: 0
+HealthCheck: true
+MaxConnections: 100
 
   ________      __________        .__
  /  _____/  ____\______   \_____  |  | _____    ____   ____  ___________
@@ -76,15 +76,81 @@ ProxyPass: [http://192.168.1.1 http://192.168.1.2:1015 https://192.168.1.2 http:
 BalanceMode: round_robin
 ```
 
-## Forward Proxy and Reverse Proxy
+The `GoBalancer` will perform periodical `health check`s on all proxy sites. When a site is unreachable, it will be automatically removed from the balancer, which will look like:
 
-Maybe most of us have used proxies. A forward proxy can be roughly defined as a domain between user client and the internet, which hides the real client from the internet, acting as if they(proxies) are users themselves.
+```bash
+2022/06/22 18:48:21 Service 192.168.1.2:1015 is down, removing from the pool.
+2022/06/22 18:48:21 Service 192.168.1.1:80 is down, removing from the pool.
+2022/06/22 18:48:21 Service 192.168.1.2:443 is down, removing from the pool.
+```
 
-And vice versa. So there are reverse proxies hiding concrete servers from the client. Like the pic shown beneath.
+However, the balancer will still perform health checks on unreachable sites. When a site is reachable, it will automatically be added to the balancer.
 
-![Forward and Reverse](arc/reverse_proxy.png)
+You can also disable the health check by setting `"health_check": false` in the config file.
 
-So here in [httputilDemo](httputilDemo/main.go), I will show you how to create a simple reverse proxy.
+For more complicated architecture scenarios, I'd prefer to change the health check mechanism, making the sites send heartbeat messages to the balancer to get registered. And sites shall be wiped out from the pool when the heartbeat message is not received for a certain number of heartbeat periods.
+
+### API Reference
+
+GoBalancer is also a go library that implements load-balancing algorithms, it can be used as API on its own.
+
+What you need to do is to import the `gobalancer` package first.
+
+```bash
+go get github.com/mizumoto-cn/gobalancer
+```
+
+Then
+
+```go
+import "github.com/mizumoto-cn/gobalancer"
+```
+
+Now you can use `balancer.Build` to build a balancer.
+
+<!-- markdownlint-disable no-hard-tabs -->
+
+```go
+hosts := []string{
+	"http://192.168.97.1",
+	"http://192.168.97.2",
+	"http://192.168.97.3",
+	"http://192.168.97.4",
+}
+
+balancer, err := balancer.Build(balancer.PowerOfTwoChoicesBalancer, hosts)
+if err != nil {
+	return err
+}
+```
+
+Balancers were built with the factory pattern, and you can find the aliases in [/balancer/const.go](/balancer/const.go). You can find the implemented balancers in [Algorithms](#algorithms) part. Balancers implement the `Balancer` interface:
+
+```go
+type Balancer interface {
+	AddHost(host string) error
+	RemoveHost(host string) error
+	BalanceHost(key string) (string, error) // choose a host from the list regarding the key
+	Inc(host string) error                  // increase the number of connections to the host by 1
+	Done(host string) error                 // decrease the number of connections to the host by 1
+}
+```
+
+Balancers shall be used like this:
+
+```go
+client := "http://192.168.97.11" // request client ip
+target, err := balancer.Balance(client)
+if err != nil {
+	return err
+}
+
+balancer.Inc(target)// increase the connection count of the target server
+defer balancer.Done(target)// decrease the connection count of the target server
+
+// route to the target server, do something
+...
+```
 
 ## Architecture
 
@@ -99,6 +165,16 @@ Try show the architecture of the project in tree diagram below.
 
 Go Balancer is a light-weight payload balancer.
 It has no complex architecture, basically only uses the factory pattern in balancer registry and creation.
+
+### Forward Proxy and Reverse Proxy
+
+Maybe most of us have used proxies. A forward proxy can be roughly defined as a domain between user client and the internet, which hides the real client from the internet, acting as if they(proxies) are users themselves.
+
+And vice versa. So there are reverse proxies hiding concrete servers from the client. Like the pic shown beneath.
+
+![Forward and Reverse](arc/reverse_proxy.png)
+
+So here in [httputilDemo](httputilDemo/main.go), I will show you how to create a simple reverse proxy.
 
 Let's start with the payload balancer part.
 
@@ -195,9 +271,9 @@ We set separated utilities in the [`util` package](util/util.go), while the conf
 
 > To be implemented.
 
-## Algorithms
+### Algorithms
 
-Typically, we have a set of 7 load balancer algorithms:
+We have a set of balancer algorithms:
 
 - random [![status](https://img.shields.io/badge/test-pass-green)](/balancer/random.go)
 - round-robin [![status](https://img.shields.io/badge/test-pass-green)](/balancer/round_robin.go)
