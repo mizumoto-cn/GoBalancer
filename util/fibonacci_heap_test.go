@@ -775,7 +775,7 @@ var _ = Describe("Tests of fibHeap", func() {
 			tag, key := heap.ExtractMin()
 			Expect(tag).Should(BeEquivalentTo(0))
 			Expect(key).Should(BeEquivalentTo(0))
-			tag, key = heap.ExtractMin()
+			_, key = heap.ExtractMin()
 			Expect(key).Should(BeEquivalentTo(math.Inf(1)))
 		})
 	})

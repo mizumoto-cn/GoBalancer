@@ -3,6 +3,9 @@
 ![Go Version](https://img.shields.io/badge/Go%20version-v1.18.3-yellow)
 [![License](https://img.shields.io/badge/License-MGPL%20v1.2-green.svg)](/License/Mizumoto%20General%20Public%20License%20v1.2.md)
 
+[![Build](https://github.com/mizumoto-cn/GoBalancer/actions/workflows/go.yml/badge.svg)](https://github.com/mizumoto-cn/GoBalancer/actions)
+
+
 ```golang
   ________      __________        .__                                    
  /  _____/  ____\______   \_____  |  | _____    ____   ____  ___________ 
