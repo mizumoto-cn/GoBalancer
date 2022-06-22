@@ -285,3 +285,15 @@ We have a set of balancer algorithms:
 - least-loaded [![status](https://img.shields.io/badge/test-pass-green)](/balancer/least_loaded.go)
   
 Thank tencentyun/tsf-go for [practical p2c algorithm implementation](https://github.com/tencentyun/tsf-go/blob/master/balancer/p2c/p2c.go) examples.
+
+## Licensing
+
+This project is governed by [Mizumoto General Public License v1.2](License/Mizumoto%20General%20Public%20License%20v1.2.md). Basically a Mozilla 2.0 public license, but with extra restrictions:
+
+By using any part of this project, you are deemed to have fully understanding and acceptance of the following terms：
+
+1. You must conspicuously display, without modification, this License and the notice on each redistributed or derivative copy of the License Covered Work.
+2. Any non-independent developers companies/groups/legal entities or other organizations should ensure that employees are not oppressed or exploited, and that employees can always receive a reasonable salary for their legal working hours.
+3. Any independent or non-independent developers/companies/groups/legal entities or other organizations, shall ensure that it has a clear conscience, including and not limited to **opposition to any form of Nazi or Neo-Nazism organization(s)**.
+
+Otherwise these Individuals / Companies / Groups / Legal-entities **will not have the right to copy / modify / redistribute any code / file / algorithm** governed by MGPL v1.2.
