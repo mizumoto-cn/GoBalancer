@@ -37,6 +37,12 @@ and then build the binary with:
   go build
 ```
 
+Or simply fetch the docker image:
+
+```bash
+  docker pull mizumotocn/go-balancer
+```
+
 ### First Run
 
 You need to create a config file first, see example config file at [config.json](./config.json).
