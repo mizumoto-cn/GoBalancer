@@ -5,12 +5,13 @@ ENV GO111MODULE=on \
     CGO_ENABLE=0
 
 # copy the source code
-ADD . /gobalancer
+# ADD . /gobalancer
 
 # default entrypoint
 WORKDIR /gobalancer
 
 # install dependencies
+RUN go get -v github.com/mizumoto-cn/gobalancer/...
 RUN go build -v
 
 # run the application
